@@ -113,11 +113,25 @@ if [ ! -f "$WG_CONFIG" ]; then
     fi
 
     if [ "$DISTRO" == "Ubuntu" ]; then
-        apt update && apt upgrade -y && apt dist-upgrade -y && apt autoremove -y && apt install build-essential haveged -y && apt install software-properties-common -y && add-apt-repository ppa:wireguard/wireguard -y && apt update && apt install wireguard qrencode iptables-persistent -y
+        apt update
+        apt upgrade -y
+        apt dist-upgrade -y
+        apt autoremove -y
+        apt install build-essential haveged -y
+        apt install software-properties-common -y
+        add-apt-repository ppa:wireguard/wireguard -y
+        apt update
+        apt install wireguard qrencode iptables-persistent -y
+        
     elif [ "$DISTRO" == "Debian" ]; then
         echo "deb http://deb.debian.org/debian/ unstable main" > /etc/apt/sources.list.d/unstable.list
         printf 'Package: *\nPin: release a=unstable\nPin-Priority: 90\n' > /etc/apt/preferences.d/limit-unstable
-        apt-get update && apt-get upgrade -y && apt-get dist-upgrade -y && apt-get autoremove clean -y && apt-get install build-essential haveged -y && apt install wireguard qrencode iptables-persistent -y
+        apt-get update
+        apt-get upgrade -y
+        apt-get dist-upgrade -y
+        apt-get autoremove clean -y
+        apt-get install build-essential haveged -y
+        apt-get install wireguard qrencode iptables-persistent -y
     elif [ "$DISTRO" == "CentOS" ]; then
         curl -Lo /etc/yum.repos.d/wireguard.repo https://copr.fedorainfracloud.org/coprs/jdoss/wireguard/repo/epel-7/jdoss-wireguard-epel-7.repo
         yum install epel-release -y
