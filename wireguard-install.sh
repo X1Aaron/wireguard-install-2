@@ -134,7 +134,7 @@ if [ ! -f "$WG_CONFIG" ]; then
         apt-get install wireguard qrencode iptables-persistent -y
     elif [ "$DISTRO" == "CentOS" ]; then
         curl -Lo /etc/yum.repos.d/wireguard.repo https://copr.fedorainfracloud.org/coprs/jdoss/wireguard/repo/epel-7/jdoss-wireguard-epel-7.repo
-        yum update
+        yum update -y
         yum install epel-release -y
         yum install wireguard-dkms qrencode wireguard-tools firewalld -y
     fi
