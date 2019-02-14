@@ -113,6 +113,9 @@ if [ ! -f "$WG_CONFIG" ]; then
     fi
 
     if [ "$DISTRO" == "Ubuntu" ]; then
+        ufw allow ssh
+        ufw allow $SERVER_PORT/udp
+        ufw --force enable
         apt update
         apt upgrade -y
         apt dist-upgrade -y
