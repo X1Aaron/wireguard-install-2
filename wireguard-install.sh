@@ -5,6 +5,11 @@
 
 WG_CONFIG="/etc/wireguard/wg0.conf"
 
+if [[ "$EUID" -ne 0 ]]; then
+    echo "Sorry, you need to run this as root"
+    exit
+fi
+
 function get_free_udp_port
 {
     local port=$(shuf -i 2000-65000 -n 1)
@@ -15,11 +20,6 @@ function get_free_udp_port
         get_free_udp_port
     fi
 }
-
-if [[ "$EUID" -ne 0 ]]; then
-    echo "Sorry, you need to run this as root"
-    exit
-fi
 
 if [[ ! -e /dev/net/tun ]]; then
     echo "The TUN device is not available. You need to enable TUN before running this script"
