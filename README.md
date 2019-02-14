@@ -21,4 +21,6 @@ Copy the file /root/client-wg0.conf from a remote server to your local PC path /
 sudo systemctl start wg-quick@wg0.service
 ```
 
-To show VPN status, run sudo wg show.
+To show VPN status, run 
+
+sudo wg show
