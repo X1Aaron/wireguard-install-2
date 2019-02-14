@@ -113,7 +113,7 @@ if [ ! -f "$WG_CONFIG" ]; then
     fi
 
     if [ "$DISTRO" == "Ubuntu" ]; then
-        apt update && apt upgrade -y && apt dist-upgrade -y && apt autoremove clean -y && apt install build-essential haveged -y && apt install software-properties-common -y && add-apt-repository ppa:wireguard/wireguard -y && apt update && apt install wireguard qrencode iptables-persistent -y
+        apt update && apt upgrade -y && apt dist-upgrade -y && apt autoremove -y && apt install build-essential haveged -y && apt install software-properties-common -y && add-apt-repository ppa:wireguard/wireguard -y && apt update && apt install wireguard qrencode iptables-persistent -y
     elif [ "$DISTRO" == "Debian" ]; then
         echo "deb http://deb.debian.org/debian/ unstable main" > /etc/apt/sources.list.d/unstable.list
         printf 'Package: *\nPin: release a=unstable\nPin-Priority: 90\n' > /etc/apt/preferences.d/limit-unstable
