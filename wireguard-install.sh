@@ -117,11 +117,11 @@ if [ ! -f "$WG_CONFIG" ]; then
         apt upgrade -y
         apt dist-upgrade -y
         apt autoremove -y
-        apt install build-essential haveged -y
+        apt install build-essential haveged ufw -y
         apt install software-properties-common -y
         add-apt-repository ppa:wireguard/wireguard -y
         apt update
-        apt install wireguard qrencode iptables-persistent ufw -y
+        apt install wireguard qrencode iptables-persistent -y
                 
     elif [ "$DISTRO" == "Debian" ]; then
         echo "deb http://deb.debian.org/debian/ unstable main" > /etc/apt/sources.list.d/unstable.list
@@ -185,13 +185,13 @@ qrencode -t ansiutf8 -l L < $HOME/client-wg0.conf
         firewall-cmd --direct --add-rule ipv4 nat POSTROUTING 0 -s $PRIVATE_SUBNET ! -d $PRIVATE_SUBNET -j SNAT --to $SERVER_HOST
         firewall-cmd --permanent --direct --add-rule ipv4 nat POSTROUTING 0 -s $PRIVATE_SUBNET ! -d $PRIVATE_SUBNET -j SNAT --to $SERVER_HOST
     else
+        ufw allow $SERVER_PORT/udp
+        ufw --force enable
         iptables -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
         iptables -A FORWARD -m conntrack --ctstate NEW -s $PRIVATE_SUBNET -m policy --pol none --dir in -j ACCEPT
         iptables -t nat -A POSTROUTING -s $PRIVATE_SUBNET -m policy --pol none --dir out -j MASQUERADE
         iptables -A INPUT -p udp --dport $SERVER_PORT -j ACCEPT
         iptables-save > /etc/iptables/rules.v4
-        ufw allow $SERVER_PORT/udp
-        ufw --force enable
     fi
 
     systemctl enable wg-quick@wg0.service
