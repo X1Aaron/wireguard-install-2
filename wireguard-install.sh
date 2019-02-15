@@ -113,9 +113,6 @@ if [ ! -f "$WG_CONFIG" ]; then
     fi
 
     if [ "$DISTRO" == "Ubuntu" ]; then
-        ufw allow ssh
-        ufw allow $SERVER_PORT/udp
-        ufw --force enable
         apt update
         apt upgrade -y
         apt dist-upgrade -y
@@ -124,8 +121,8 @@ if [ ! -f "$WG_CONFIG" ]; then
         apt install software-properties-common -y
         add-apt-repository ppa:wireguard/wireguard -y
         apt update
-        apt install wireguard qrencode iptables-persistent -y
-        
+        apt install wireguard qrencode iptables-persistent ufw -y
+                
     elif [ "$DISTRO" == "Debian" ]; then
         echo "deb http://deb.debian.org/debian/ unstable main" > /etc/apt/sources.list.d/unstable.list
         printf 'Package: *\nPin: release a=unstable\nPin-Priority: 90\n' > /etc/apt/preferences.d/limit-unstable
@@ -193,6 +190,8 @@ qrencode -t ansiutf8 -l L < $HOME/client-wg0.conf
         iptables -t nat -A POSTROUTING -s $PRIVATE_SUBNET -m policy --pol none --dir out -j MASQUERADE
         iptables -A INPUT -p udp --dport $SERVER_PORT -j ACCEPT
         iptables-save > /etc/iptables/rules.v4
+        ufw allow $SERVER_PORT/udp
+        ufw --force enable
     fi
 
     systemctl enable wg-quick@wg0.service
