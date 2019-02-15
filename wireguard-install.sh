@@ -47,7 +47,7 @@ if [ ! -f "$WG_CONFIG" ]; then
         fi
     fi
 
-    echo "What port do you want WireGuard to listen to?"
+    	echo "What port do you want WireGuard to listen to?"
 	echo "   1) Default: 51820"
 	echo "   2) Custom"
 	echo "   3) Random [2000-65535]"
