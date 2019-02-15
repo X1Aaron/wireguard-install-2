@@ -10,6 +10,11 @@ if [[ "$EUID" -ne 0 ]]; then
     exit
 fi
 
+if [[ ! -e /dev/net/tun ]]; then
+    echo "The TUN device is not available. You need to enable TUN before running this script"
+    exit
+fi
+
 function get_free_udp_port
 {
     local port=$(shuf -i 2000-65000 -n 1)
@@ -20,12 +25,6 @@ function get_free_udp_port
         get_free_udp_port
     fi
 }
-
-if [[ ! -e /dev/net/tun ]]; then
-    echo "The TUN device is not available. You need to enable TUN before running this script"
-    exit
-fi
-
 
 if [ -e /etc/centos-release ]; then
     DISTRO="CentOS"
