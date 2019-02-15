@@ -2,6 +2,7 @@
 #
 # https://github.com/LiveChief/wireguard-install
 # Secure WireGuard server installer for Debian, Ubuntu, CentOS
+#
 
 WG_CONFIG="/etc/wireguard/wg0.conf"
 
