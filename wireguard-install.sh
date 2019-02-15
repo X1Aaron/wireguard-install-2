@@ -59,8 +59,8 @@ if [ ! -f "$WG_CONFIG" ]; then
 			SERVER_PORT="51820"
 		;;
 		2)
-			until [[ "$PORT" =~ ^[0-9]+$ ]] && [ "$PORT" -ge 1 ] && [ "$SERVER_PORT" -le 65535 ]; do
-				read -rp "Custom port [1-65535]: " -e -i 51820 PORT
+			until [[ "$SERVER_PORT" =~ ^[0-9]+$ ]] && [ "$SERVER_PORT" -ge 1 ] && [ "$SERVER_PORT" -le 65535 ]; do
+				read -rp "Custom port [1-65535]: " -e -i 51820 SERVER_PORT
 			done
 		;;
 		3)
