@@ -15,17 +15,6 @@ if [[ ! -e /dev/net/tun ]]; then
     exit
 fi
 
-function get_free_udp_port
-{
-    local port=$(shuf -i 2000-65000 -n 1)
-    ss -lau | grep $port > /dev/null
-    if [[ $? == 1 ]] ; then
-        echo "$port"
-    else
-        get_free_udp_port
-    fi
-}
-
 if [ -e /etc/centos-release ]; then
     DISTRO="CentOS"
 elif [ -e /etc/debian_version ]; then
@@ -58,9 +47,28 @@ if [ ! -f "$WG_CONFIG" ]; then
         fi
     fi
 
-    if [ "$SERVER_PORT" == "" ]; then
-        SERVER_PORT=$( get_free_udp_port )
-    fi
+    echo "What port do you want WireGuard to listen to?"
+	echo "   1) Default: 51820"
+	echo "   2) Custom"
+	echo "   3) Random [2000-65535]"
+	until [[ "$PORT_CHOICE" =~ ^[1-3]$ ]]; do
+		read -rp "Port choice [1-3]: " -e -i 1 PORT_CHOICE
+	done
+	case $PORT_CHOICE in
+		1)
+			SERVER_PORT="51820"
+		;;
+		2)
+			until [[ "$PORT" =~ ^[0-9]+$ ]] && [ "$PORT" -ge 1 ] && [ "$SERVER_PORT" -le 65535 ]; do
+				read -rp "Custom port [1-65535]: " -e -i 51820 PORT
+			done
+		;;
+		3)
+			# Generate random number within private ports range
+			SERVER_PORT=$(shuf -i2000-65535 -n1)
+			echo "Random Port: $SERVER_PORT"
+		;;
+	esac
 
     if [ "$CLIENT_DNS" == "" ]; then
         echo "Which DNS do you want to use with the VPN?"
@@ -131,6 +139,7 @@ if [ ! -f "$WG_CONFIG" ]; then
         apt-get autoremove clean -y
         apt-get install build-essential haveged -y
         apt-get install wireguard qrencode iptables-persistent -y
+
     elif [ "$DISTRO" == "CentOS" ]; then
         curl -Lo /etc/yum.repos.d/wireguard.repo https://copr.fedorainfracloud.org/coprs/jdoss/wireguard/repo/epel-7/jdoss-wireguard-epel-7.repo
         yum update -y
