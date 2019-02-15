@@ -37,7 +37,7 @@ if [ ! -f "$WG_CONFIG" ]; then
     GATEWAY_ADDRESS="${PRIVATE_SUBNET::-4}1"
 
     if [ "$SERVER_HOST" == "" ]; then
-        SERVER_HOST="$(dig -4 +short A myip.opendns.com @resolver2.opendns.com)"
+        SERVER_HOST="$(wget -O - -q https://checkip.amazonaws.com)"
         if [ "$INTERACTIVE" == "yes" ]; then
             read -p "Servers public IP address is $SERVER_HOST. Is that correct? [y/n]: " -e -i "y" CONFIRM
             if [ "$CONFIRM" == "n" ]; then
