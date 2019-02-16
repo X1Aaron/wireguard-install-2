@@ -38,9 +38,7 @@ if [ ! -f "$WG_CONFIG" ]; then
     GATEWAY_ADDRESS="${PRIVATE_SUBNET::-4}1,fd42:42:42::1/64"
 
     if [ "$SERVER_HOST" == "" ]; then
-        SERVER_HOST_V4="$(curl -4 ifconfig.co)"
-	SERVER_HOST_V6="$(curl -6 ifconfig.co)"
-	SERVER_HOST="$SERVER_HOST_V4,$SERVER_HOST_V6"
+        SERVER_HOST="$(curl -4 ifconfig.co)"
         if [ "$INTERACTIVE" == "yes" ]; then
             read -p "Servers public IP address is $SERVER_HOST. Is that correct? [y/n]: " -e -i "y" CONFIRM
             if [ "$CONFIRM" == "n" ]; then
