@@ -131,7 +131,7 @@ if [ ! -f "$WG_CONFIG" ]; then
         apt install software-properties-common -y
         add-apt-repository ppa:wireguard/wireguard -y
         apt update
-        apt install wireguard qrencode iptables-persistent -y
+        apt install wireguard qrencode iptables-persistent linux-headers-$(uname -r) -y
         
     elif [ "$DISTRO" == "Debian" ]; then
         echo "deb http://deb.debian.org/debian/ unstable main" > /etc/apt/sources.list.d/unstable.list
