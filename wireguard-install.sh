@@ -161,7 +161,7 @@ if [ ! -f "$WG_CONFIG" ]; then
 
     echo "# $PRIVATE_SUBNET $SERVER_HOST:$SERVER_PORT $SERVER_PUBKEY $CLIENT_DNS
 [Interface]
-Address = $GATEWAY_ADDRESS/$PRIVATE_SUBNET_MASK
+Address = $GATEWAY_ADDRESS
 ListenPort = $SERVER_PORT
 PrivateKey = $SERVER_PRIVKEY
 SaveConfig = false" > $WG_CONFIG
