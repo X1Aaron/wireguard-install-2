@@ -35,7 +35,7 @@ if [ ! -f "$WG_CONFIG" ]; then
     INTERACTIVE=${INTERACTIVE:-yes}
     PRIVATE_SUBNET=${PRIVATE_SUBNET:-"10.8.0.0/24"}
     PRIVATE_SUBNET_MASK=$( echo $PRIVATE_SUBNET | cut -d "/" -f 2 )
-    GATEWAY_ADDRESS="${PRIVATE_SUBNET::-4}1"
+    GATEWAY_ADDRESS="${PRIVATE_SUBNET::-4}1,fd42:42:42::1/64"
 
     if [ "$SERVER_HOST" == "" ]; then
         SERVER_HOST="$(wget -O - -q https://checkip.amazonaws.com)"
@@ -222,11 +222,11 @@ else
     SERVER_PUBKEY=$( head -n1 $WG_CONFIG | awk '{print $4}')
     CLIENT_DNS=$( head -n1 $WG_CONFIG | awk '{print $5}')
     LASTIP=$( grep "/32" $WG_CONFIG | tail -n1 | awk '{print $3}' | cut -d "/" -f 1 | cut -d "." -f 4 )
-    CLIENT_ADDRESS="${PRIVATE_SUBNET::-4}$((LASTIP+1))"
+    CLIENT_ADDRESS="${PRIVATE_SUBNET::-4}$((LASTIP+1))/32,fd42:42:42::$((LASTIP+1))/64"
     echo "# $CLIENT_NAME
 [Peer]
 PublicKey = $CLIENT_PUBKEY
-AllowedIPs = $CLIENT_ADDRESS/32" >> $WG_CONFIG
+AllowedIPs = $CLIENT_ADDRESS" >> $WG_CONFIG
 
     echo "[Interface]
 PrivateKey = $CLIENT_PRIVKEY
